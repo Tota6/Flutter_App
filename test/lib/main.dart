@@ -1,4 +1,5 @@
 // ignore_for_file: deprecated_member_use, prefer_const_constructors, duplicate_ignore, avoid_print
+import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import "./question.dart";
@@ -49,10 +50,11 @@ class _MyAppState extends State<MyApp> {
       appBar: AppBar(title: Text("Home Page")),
       body: Column(
         children: [
-          Question(questions[_questionIndex]['questionText']),
-          Answer(_answerQuestion),
-          Answer(_answerQuestion),
-          Answer(_answerQuestion),
+          Question(jsonEncode(questions[_questionIndex]['questionText'])),
+          ...(questions[_questionIndex]['answers'] as List<String>)
+              .map((answer) {
+            return Answer(_answerQuestion, answer);
+          }).toList()
         ],
       ),
     ));

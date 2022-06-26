@@ -3,18 +3,35 @@
 import 'package:flutter/material.dart';
 
 class Answer extends StatelessWidget {
-  final Function handler;
-  Answer(this.handler);
+  final Function selectHandler;
+  final String answerText;
+
+  Answer(this.selectHandler, this.answerText);
+
   @override
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
       child: RaisedButton(
-        color: Color.fromARGB(255, 62, 44, 44),
+        color: Colors.blue,
         textColor: Colors.white,
-        child: Text("Answer1"),
-        onPressed: () => handler,
+        child: Text(answerText),
+        onPressed: selectHandler,
       ),
     );
   }
+  // final Function handler;
+  // Answer(this.handler);
+  // @override
+  // Widget build(BuildContext context) {
+  //   return Container(
+  //     width: double.infinity,
+  //     child: RaisedButton(
+  //       color: Color.fromARGB(255, 176, 119, 119),
+  //       textColor: Colors.white,
+  //       child: Text("Answer1"),
+  //       onPressed: handler,
+  //     ),
+  //   );
+  // }
 }
