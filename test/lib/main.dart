@@ -1,9 +1,8 @@
-// ignore_for_file: deprecated_member_use, prefer_const_constructors, duplicate_ignore, avoid_print
-
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import "./question.dart";
-import './answer.dart';
+import 'package:test/result.dart';
+import './quize.dart';
+import './result.dart';
 
 // void main() {
 //   runApp(MyApp());
@@ -20,27 +19,51 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  final questions = const [
+  final _questions = const [
     {
       'questionText': "what is your fav color? ",
-      'answers': ['Red', 'Orange', 'Green', 'Blue'],
+      'answers': [
+        {Text: 'Red', 'score': "3"},
+        {Text: 'Orange', 'score': "10"},
+        {Text: 'Green', 'score': "1"},
+        {Text: 'Blue', 'score': "5"}
+      ],
     },
     {
       'questionText': "what's your name?",
-      'answers': ['Martina', 'Mina', 'Micheal', 'Mano'],
+      'answers': [
+        {Text: 'Martina', 'score': "0"},
+        {Text: 'Mina', 'score': "1"},
+        {Text: 'Micheal', 'score': "5"},
+        {Text: 'Mano', 'score': "7"}
+      ],
     },
     {
       'questionText': "what's fav animal?",
-      'answers': ['Cat', 'Dog', 'Rabbit', 'Monkey'],
+      'answers': [
+        {Text: 'Cat', 'score': "1"},
+        {Text: 'Dog', 'score': "10"},
+        {Text: 'Rabbit', 'score': "8"},
+        {Text: 'Monkey', 'score': "3"}
+      ],
     }
   ];
   var _questionIndex = 0;
-  void _answerQuestion() {
+  var _totalScore = 0;
+  void _resetQuize() {
+    setState(() {
+      var _questionIndex = 0;
+      var _totalScore = 0;
+    });
+  }
+
+  void _answerQuestion(int score) {
+    _totalScore += score;
     setState(() {
       _questionIndex = _questionIndex + 1;
     });
     print(_questionIndex);
-    if (_questionIndex < questions.length) {
+    if (_questionIndex < _questions.length) {
       print("we have more questions");
     } else {
       print(" No more question ");
@@ -54,21 +77,13 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
         home: Scaffold(
       appBar: AppBar(title: Text("Home Page")),
-      body: _questionIndex < questions.length
-          ? Column(
-              children: [
-                Question(
-                  jsonEncode(questions[_questionIndex]["questionText"]),
-                ),
-                ...(questions[_questionIndex]["answers"] as List<String>)
-                    .map((answers) {
-                  return Answer(_answerQuestion, answers);
-                }).toList()
-              ],
+      body: _questionIndex < _questions.length
+          ? Quize(
+              questions: _questions,
+              answerQuestion: () => _answerQuestion,
+              questionIndex: _questionIndex,
             )
-          : Center(
-              child: Text("you did it !"),
-            ),
+          : Result(_totalScore, _resetQuize),
     ));
   }
 }
